@@ -9,12 +9,16 @@ public class Tasks {
 	private boolean completed = false;						//true complete, false not completed 
 															//floating tasks, dueDetails and blockedDetails are both null
 	private int type = 0;									//1 = deadline task, 2 = duration, 3 = blocked, 4 = floating
+	private final int DeadlineType = 1;
+	private final int DurationType = 2;
+	private final int BlockedType = 3;
+	private final int FloatingType = 4;
 	
 	//floating task
 	public Tasks(int ID, String desc) {
 		setTaskID(ID);
 		setDescription(desc);
-		setType(4);
+		setType(FloatingType);
 	}
 	
 	//deadline/duration tasks
@@ -30,7 +34,7 @@ public class Tasks {
 		setTaskID(ID);
 		setDescription(desc);
 		setBlockedDetails(blockedDeadlines);
-		setType(3);
+		setType(BlockedType);
 	}
 	
 	//select a blocked timeslot as final, position starts from 1 (arraylist[0])

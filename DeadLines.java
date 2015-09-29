@@ -6,19 +6,21 @@ public class DeadLines {
 	private String endDate = "";
 	private String endTime = "";
 	private int type = 0;				//1 = deadline task, 2 = duration
+	private final int DeadlineType = 1;
+	private final int DurationType = 2;
 
 	public DeadLines(String sDate, String sTime, String eDate, String eTime) {
 		setStartDate(sDate);
 		setStartTime(sTime);
 		setEndDate(eDate);
 		setEndTime(eTime);
-		setType(2);
+		setType(DurationType);
 	}
 	
 	public DeadLines(String eDate, String eTime) {
 		setEndDate(eDate);
 		setEndTime(eTime);
-		setType(1);
+		setType(DeadlineType);
 	}
 	
 	public String getStartDate() {
