@@ -95,9 +95,9 @@ public class Storage {
 			e.printStackTrace();
 		}
 		
-		//close reader
+		//close writer and reader
 		try {
-			br.close();
+			closeWriterReader();
 		} 
 		catch (IOException e) {
 			e.printStackTrace();
@@ -117,9 +117,25 @@ public class Storage {
 		}
 		
 		myTaskList = readFile();
+		newTask.setTaskID(GenerateTaskID());
 		myTaskList.add(newTask);
 		
-		String tempLine = gson.toJson(newTask); 
+		try {
+			closeWriterReader();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String tempLine = gson.toJson(newTask);
+		
+		try {
+			openWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		//write new Tasks into file
 		try {
@@ -132,7 +148,7 @@ public class Storage {
 		
 		//close writer
 		try {
-			bw.close();
+			closeWriterReader();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -140,6 +156,8 @@ public class Storage {
 		
 		return myTaskList;
 	}
+
+	
 	
 	public ArrayList<Tasks> deleteTask(int taskID) throws IOException{
 		
@@ -186,8 +204,7 @@ public class Storage {
 			//close all writers and readers
 			try {
 				TempBw.close();
-				bw.close();
-				br.close();
+				closeWriterReader();
 				System.gc();
 			}
 			catch (IOException e) {
@@ -212,6 +229,71 @@ public class Storage {
 		    }
 		}	
 		return myTaskList;
+	}
+	
+	//search and returns entries with description matching search String
+	public ArrayList<Tasks> SearchTask(String searchString){
+		
+		try {
+			openWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		ArrayList<Tasks> tempList = readFile();
+		myTaskList = new ArrayList<Tasks>();
+		
+		for(int i=0; i<tempList.size(); i++) {
+			if(tempList.get(i).getDescription().contains(searchString)) {
+				myTaskList.add(tempList.get(i));
+			}
+		}
+		
+		try {
+			closeWriterReader();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return myTaskList;
+	}
+	
+	private int GenerateTaskID() {
+		
+		int largestID = 0;
+		
+		try {
+			openWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		myTaskList = readFile();
+		for(int i=0; i<myTaskList.size(); i++) {
+			if(myTaskList.get(i).getTaskID() > largestID) {
+				largestID = myTaskList.get(i).getTaskID();
+			}
+		}
+		
+		try {
+			closeWriterReader();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return largestID +1;
+	}
+	
+	private void closeWriterReader() throws IOException {
+		bw.close();
+		br.close();
 	}
 	
 	public String getCurrentPath() {

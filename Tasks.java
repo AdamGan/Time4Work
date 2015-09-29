@@ -15,23 +15,20 @@ public class Tasks {
 	private final int FloatingType = 4;
 	
 	//floating task
-	public Tasks(int ID, String desc) {
-		setTaskID(ID);
+	public Tasks(String desc) {
 		setDescription(desc);
 		setType(FloatingType);
 	}
 	
 	//deadline/duration tasks
-	public Tasks(int ID, String desc, DeadLines dueDeadlines) {
-		setTaskID(ID);
+	public Tasks(String desc, DeadLines dueDeadlines) {
 		setDescription(desc);
 		setDueDetails(dueDeadlines);
 		setType(dueDetails.getType());	//DeadLines class will return if duration or deadline
 	}
 	
 	//blocked tasks
-	public Tasks(int ID, String desc, ArrayList<DeadLines> blockedDeadlines) {
-		setTaskID(ID);
+	public Tasks(String desc, ArrayList<DeadLines> blockedDeadlines) {
 		setDescription(desc);
 		setBlockedDetails(blockedDeadlines);
 		setType(BlockedType);

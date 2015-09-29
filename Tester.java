@@ -14,17 +14,17 @@ public class Tester {
 		ArrayList<Tasks> myList = null;
 		
 		//floating task
-		Tasks tempTask = new Tasks(1, "I'm a floating task!");
+		Tasks tempTask = new Tasks("I'm a floating task!");
 		myList = myStorage.appendTask(tempTask);
 		
 		//duration task
 		DeadLines tempDeadLine = new DeadLines("300915", "1800" , "300915", "2000");
-		tempTask = new Tasks(2, "I'm a duration task!", tempDeadLine );
+		tempTask = new Tasks("I'm a duration task!", tempDeadLine );
 		myList = myStorage.appendTask(tempTask);
 		
 		//deadLine task
 		tempDeadLine = new DeadLines("310915", "1200");
-		tempTask = new Tasks(3, "I'm a deadLine task!", tempDeadLine );
+		tempTask = new Tasks("I'm a deadLine task!", tempDeadLine );
 		myList = myStorage.appendTask(tempTask);
 		
 		//myList = myStorage.readFile();
