@@ -117,7 +117,12 @@ public class Storage {
 		}
 		
 		myTaskList = readFile();
-		newTask.setTaskID(GenerateTaskID());
+		
+		//if task has no taskID, generate one!
+		if(newTask.getTaskID() == 0) {
+			newTask.setTaskID(GenerateTaskID());
+		}
+		
 		myTaskList.add(newTask);
 		
 		try {
@@ -258,6 +263,52 @@ public class Storage {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return myTaskList;
+	}
+	
+	//replaces specified taskID with updated Tasks
+	public ArrayList<Tasks> UpdateTask(int TaskID, Tasks updatedTask){
+		
+			
+		try {
+			deleteTask(TaskID);
+			appendTask(updatedTask);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			openWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		myTaskList = readFile();
+		
+		/*
+		ArrayList<Tasks> tempList = readFile();
+		myTaskList = new ArrayList<Tasks>();
+		
+		for(int i=0; i<tempList.size(); i++) {
+			if(tempList.get(i).getTaskID() == TaskID) {
+				myTaskList.add(updatedTask);
+			}
+			else {
+				myTaskList.add(tempList.get(i));
+			}
+		}
+		
+		try {
+			closeWriterReader();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		*/
 		
 		return myTaskList;
 	}

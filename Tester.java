@@ -47,5 +47,16 @@ public class Tester {
 			myItem = gson.toJson(myList.get(i)); 
 			System.out.println("Item "+ (i+1) + " = " + myItem);
 		}
+		
+		tempDeadLine = new DeadLines("301015", "1800" , "301015", "2000");
+		tempTask = new Tasks("I'm a duration taskv2!", tempDeadLine );
+		tempTask.setTaskID(2);
+		myList = myStorage.UpdateTask(2, tempTask);
+		
+		System.out.println("after update ID 2");
+		for(int i=0; i<myList.size(); i++) {
+			myItem = gson.toJson(myList.get(i)); 
+			System.out.println("Item "+ (i+1) + " = " + myItem);
+		}
 	}
 }
