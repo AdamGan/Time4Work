@@ -14,17 +14,17 @@ public class Tester {
 		ArrayList<Tasks> myList = null;
 		
 		//floating task
-		Tasks tempTask = new Tasks("I'm a floating task!");
+		Tasks tempTask = new FloatingTask("I'm a floating task!");
 		myList = myStorage.appendTask(tempTask);
 		
 		//duration task
-		DeadLines tempDeadLine = new DeadLines("300915", "1800" , "300915", "2000");
-		tempTask = new Tasks("I'm a duration task!", tempDeadLine );
+		Duration tempDeadLine = new Duration("300915", "1800" , "300915", "2000");
+		tempTask = new DurationTask("I'm a duration task!", tempDeadLine );
 		myList = myStorage.appendTask(tempTask);
 		
 		//deadLine task
-		tempDeadLine = new DeadLines("310915", "1200");
-		tempTask = new Tasks("I'm a deadLine task!", tempDeadLine );
+		tempDeadLine = new Duration("310915", "1200");
+		tempTask = new DeadlineTask("I'm a deadLine task!", tempDeadLine );
 		myList = myStorage.appendTask(tempTask);
 		
 		//myList = myStorage.readFile();
@@ -48,8 +48,8 @@ public class Tester {
 			System.out.println("Item "+ (i+1) + " = " + myItem);
 		}
 		
-		tempDeadLine = new DeadLines("301015", "1800" , "301015", "2000");
-		tempTask = new Tasks("I'm a duration taskv2!", tempDeadLine );
+		tempDeadLine = new Duration("301015", "1800" , "301015", "2000");
+		tempTask = new DurationTask("I'm a duration taskv2!", tempDeadLine );
 		tempTask.setTaskID(2);
 		myList = myStorage.UpdateTask(2, tempTask);
 		
