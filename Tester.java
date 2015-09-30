@@ -15,17 +15,21 @@ public class Tester {
 		
 		//floating task
 		Tasks tempTask = new FloatingTask("I'm a floating task!");
-		myList = myStorage.appendTask(tempTask);
+		myStorage.appendTask(tempTask);
+		myList = myStorage.readFile();
 		
 		//duration task
 		Duration tempDeadLine = new Duration("300915", "1800" , "300915", "2000");
 		tempTask = new DurationTask("I'm a duration task!", tempDeadLine );
-		myList = myStorage.appendTask(tempTask);
+		myStorage.appendTask(tempTask);
+		myList = myStorage.readFile();
+				
 		
 		//deadLine task
 		tempDeadLine = new Duration("310915", "1200");
 		tempTask = new DeadlineTask("I'm a deadLine task!", tempDeadLine );
-		myList = myStorage.appendTask(tempTask);
+		myStorage.appendTask(tempTask);
+		myList = myStorage.readFile();
 		
 		//myList = myStorage.readFile();
 		String myItem;
@@ -37,7 +41,8 @@ public class Tester {
 		}
 		
 		try {
-			myList = myStorage.deleteTask(1);
+			myStorage.deleteTask(1);
+			myList = myStorage.readFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,7 +56,8 @@ public class Tester {
 		tempDeadLine = new Duration("301015", "1800" , "301015", "2000");
 		tempTask = new DurationTask("I'm a duration taskv2!", tempDeadLine );
 		tempTask.setTaskID(2);
-		myList = myStorage.UpdateTask(2, tempTask);
+		myStorage.UpdateTask(2, tempTask);
+		myList = myStorage.readFile();
 		
 		System.out.println("after update ID 2");
 		for(int i=0; i<myList.size(); i++) {
