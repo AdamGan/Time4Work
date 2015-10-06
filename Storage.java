@@ -9,7 +9,6 @@ public class Storage {
 	private File myFile;
 	private String defPath = "myTasks.txt";
 	private String currentPath = "";
-	private ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
 	private FileWriter fw;
 	private FileReader fr; 
 	private BufferedWriter bw;
@@ -47,6 +46,8 @@ public class Storage {
 	//if file exists, return contents
 	private ArrayList<Tasks> createFile(String path) throws IOException {
 		
+		ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
+		
 		//set up file
 		myFile = new File(currentPath);
 		
@@ -54,11 +55,10 @@ public class Storage {
 		if(!myFile.exists()) {
 			//myFile.mkdirs();
 			myFile.createNewFile();
-			setMyTaskList(new ArrayList<Tasks>());
 		}
 		//file exists, read file and return contents
 		else {
-			setMyTaskList(readFile());
+			myTaskList = readFile();
 		}
 		return myTaskList;
 
@@ -83,7 +83,7 @@ public class Storage {
 			e1.printStackTrace();
 		}
 		
-		myTaskList = new ArrayList<Tasks>();
+		ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
 		String tempLine = "";
 		Tasks tempTask;
 		
@@ -190,6 +190,8 @@ public class Storage {
 	public Tasks deleteTask(int taskID) throws IOException{
 		
 		Tasks deletedTask = null;
+		ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
+		
 		try {
 			openWriterReader();
 		} catch (FileNotFoundException e1) {
@@ -213,6 +215,61 @@ public class Storage {
 		
 		//taskID to be deleted is found
 		if(needDelete) {
+			
+			try {
+				closeWriterReader();
+				System.gc();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			//wait for garbage collector
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			//delete old file
+			if (!myFile.delete()) {
+		        System.out.println("Could not delete file");
+		    } 
+			
+			createFile(currentPath);
+			
+			try {
+				openWriterReader();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			
+			
+			for(int i=0; i<myTaskList.size(); i++) {
+				String tempLine = gson.toJson(myTaskList.get(i)); 
+			
+				//write new Tasks into file
+				try {
+					bw.write(tempLine);
+					bw.newLine();
+				} 
+				catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		try {
+			closeWriterReader();
+			System.gc();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+				/*
 			//create temporary file without deleted entry
 			File tempFile = new File(myFile.getAbsolutePath() + ".tmp");
 			FileWriter TempFw = new FileWriter(tempFile.getAbsoluteFile(), true);
@@ -258,6 +315,7 @@ public class Storage {
 		    	System.out.println("Could not rename file");
 		    }
 		}	
+		*/
 		return deletedTask;
 	}
 	
@@ -274,7 +332,7 @@ public class Storage {
 		
 		
 		ArrayList<Tasks> tempList = readFile();
-		myTaskList = new ArrayList<Tasks>();
+		ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
 		
 		for(int i=0; i<tempList.size(); i++) {
 			if(tempList.get(i).getDescription().contains(searchString)) {
@@ -292,16 +350,43 @@ public class Storage {
 		return myTaskList;
 	}
 	
-	//replaces specified taskID with updated Tasks
+	//search and returns task by taskID
+		public Tasks SearchTaskID(int taskID) throws FileNotFoundException, IOException{
+			
+			openWriterReader();
+
+			
+			ArrayList<Tasks> tempList = readFile();
+			Tasks myTask = null;
+			
+			for(int i=0; i<tempList.size(); i++) {
+				if(tempList.get(i).getTaskID() == taskID) {
+					myTask = tempList.get(i);
+				}
+			}
+			
+			closeWriterReader();
+			
+			return myTask;
+		}
+	
+	//replaces specified taskID with updated Tasks and returns "old" updated task
 	public Tasks UpdateTask(int TaskID, Tasks updatedTask){
 		
-			
+		Tasks oldTask = null;
+		
 		try {
-			deleteTask(TaskID);
-			appendTask(updatedTask);
-		} 
-		catch (IOException e) {
-			e.printStackTrace();
+			openWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		try {
+			oldTask = SearchTaskID(TaskID);
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		}
 		
 		try {
@@ -312,35 +397,29 @@ public class Storage {
 			e1.printStackTrace();
 		}
 		
-		//myTaskList = readFile();
-		
-		/*
-		ArrayList<Tasks> tempList = readFile();
-		myTaskList = new ArrayList<Tasks>();
-		
-		for(int i=0; i<tempList.size(); i++) {
-			if(tempList.get(i).getTaskID() == TaskID) {
-				myTaskList.add(updatedTask);
-			}
-			else {
-				myTaskList.add(tempList.get(i));
-			}
+		try {
+			deleteTask(TaskID);
+			appendTask(updatedTask);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		try {
 			closeWriterReader();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
 		
-		return updatedTask;
+		return oldTask;
 	}
 	
 	private int GenerateTaskID() {
 		
 		int largestID = 0;
+		ArrayList<Tasks> myTaskList = new ArrayList<Tasks>();
 		
 		try {
 			openWriterReader();
@@ -380,11 +459,5 @@ public class Storage {
 		this.currentPath = currentPath;
 	}
 
-	public ArrayList<Tasks> getMyTaskList() {
-		return myTaskList;
-	}
 
-	public void setMyTaskList(ArrayList<Tasks> myTaskList) {
-		this.myTaskList = myTaskList;
-	}
 }
