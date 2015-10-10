@@ -7,29 +7,78 @@ public class Tester {
 
 	public static void main(String[] args) {
 		
+		/*
 		//default path
-		Storage myStorage = new Storage();
+		Storage myStorage = null;
+		try {
+			myStorage = new Storage();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		*/
+		
+		//custom path
+		Storage myStorage = null;
+		try {
+			myStorage = new Storage("C:\\Users\\Adam\\Downloads\\test\\maybe\\myTasks.txt");
+		} catch (IOException e1) {
+			System.out.println("I caught exception!");
+			e1.printStackTrace();
+		}
+		
+		System.out.println("created without exception");
+		
 		Gson gson = new Gson(); 
 		
 		ArrayList<Tasks> myList = null;
 		
 		//floating task
 		Tasks tempTask = new FloatingTask("I'm a floating task!");
-		myStorage.appendTask(tempTask);
-		myList = myStorage.readFile();
+		try {
+			myStorage.appendTask(tempTask);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			myList = myStorage.readFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		//duration task
 		Duration tempDeadLine = new Duration("300915", "1800" , "300915", "2000");
 		tempTask = new DurationTask("I'm a duration task!", tempDeadLine );
-		myStorage.appendTask(tempTask);
-		myList = myStorage.readFile();
+		try {
+			myStorage.appendTask(tempTask);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			myList = myStorage.readFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 				
 		
 		//deadLine task
 		tempDeadLine = new Duration("310915", "1200");
 		tempTask = new DeadlineTask("I'm a deadLine task!", tempDeadLine );
-		myStorage.appendTask(tempTask);
-		myList = myStorage.readFile();
+		try {
+			myStorage.appendTask(tempTask);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			myList = myStorage.readFile();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		//myList = myStorage.readFile();
 		String myItem;
@@ -43,7 +92,7 @@ public class Tester {
 		try {
 			myStorage.deleteTask(1);
 			myList = myStorage.readFile();
-		} catch (IOException e) {
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		
@@ -56,8 +105,18 @@ public class Tester {
 		tempDeadLine = new Duration("301015", "1800" , "301015", "2000");
 		tempTask = new DurationTask("I'm a duration taskv2!", tempDeadLine );
 		tempTask.setTaskID(2);
-		myStorage.UpdateTask(2, tempTask);
-		myList = myStorage.readFile();
+		try {
+			myStorage.UpdateTask(2, tempTask);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			myList = myStorage.readFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		System.out.println("after update ID 2");
 		for(int i=0; i<myList.size(); i++) {
