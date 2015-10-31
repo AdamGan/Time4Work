@@ -1,7 +1,9 @@
+package Time4WorkStorage;
 
 public class DeadlineTask extends Tasks{
 	
-	private Duration durationDetails = null;	
+	private Duration durationDetails = null;
+	private static final int DeadlineType = TaskType.DeadlineType.getTaskType();
 	
 	public DeadlineTask(int taskID, String desc, Duration duration) {
 		super.setTaskID(taskID);
@@ -14,6 +16,22 @@ public class DeadlineTask extends Tasks{
 		super.setDescription(desc);
 		super.setType(DeadlineType);
 		setDurationDetails(duration);
+	}
+	
+	public String getTime() {
+		return durationDetails.getEndTime();
+	}
+	
+	public void setTime(String eTime) {
+		this.durationDetails.setEndTime(eTime);
+	}
+	
+	public String getDate() {
+		return durationDetails.getEndDate();
+	}
+	
+	public void setDate(String eDate) {
+		this.durationDetails.setEndDate(eDate);
 	}
 
 	public Duration getDurationDetails() {

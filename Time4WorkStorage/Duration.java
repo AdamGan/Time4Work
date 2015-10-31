@@ -1,3 +1,6 @@
+package Time4WorkStorage;
+
+import Time4WorkStorage.Tasks.TaskType;
 
 public class Duration {
 	
@@ -5,9 +8,9 @@ public class Duration {
 	private String startTime = "";		//time is 24hrs “0000”
 	private String endDate = "";
 	private String endTime = "";
-	private int type = 0;				//1 = deadline task, 2 = duration
-	private final int DeadlineType = 1;
-	private final int DurationType = 2;
+	private int type = 0;				
+	private static final int DeadlineType = TaskType.DeadlineType.getTaskType();
+	private static final int DurationType = TaskType.DurationType.getTaskType();
 
 	public Duration(String sDate, String sTime, String eDate, String eTime) {
 		setStartDate(sDate);
